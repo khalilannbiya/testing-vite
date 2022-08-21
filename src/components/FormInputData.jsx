@@ -6,13 +6,12 @@ const FormInputData = ({ addData, name, handleName, email, handleEmail, gender, 
       <>
          <Box sx={{ width: "100%", marginTop: "12px" }} component="form" onSubmit={addData}>
             <Stack spacing={2}>
-               <TextField value={name} onChange={handleName} label="Nama" size="small" sx={{ width: "50%" }} required />
-               <TextField value={email} onChange={handleEmail} label="Email" size="small" sx={{ width: "50%" }} required />
+               <TextField value={name} onChange={handleName} label="Nama" size="small" required />
+               <TextField value={email} onChange={handleEmail} label="Email" size="small" required />
                <TextField
                   select
                   required
                   label="Select Gender"
-                  sx={{ width: "50%" }}
                   value={gender}
                   onChange={handleGender}
                   SelectProps={{
@@ -23,8 +22,8 @@ const FormInputData = ({ addData, name, handleName, email, handleEmail, gender, 
                   <option value="Male">Male</option>
                   <option value="Female">Female</option>
                </TextField>
-               <TextField value={quote} onChange={handleQuote} sx={{ width: "50%" }} label="Quotes" multiline rows={4} />
-               <Button sx={{ width: "50%" }} type="submit" variant="contained">
+               <TextField value={quote} onChange={handleQuote} label="Quotes" multiline rows={4} />
+               <Button type="submit" variant="contained">
                   Submit
                </Button>
             </Stack>

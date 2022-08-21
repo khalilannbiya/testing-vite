@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import Stack from "@mui/material/Stack";
+import { Stack, Box } from "@mui/material";
 import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
 import Welcome from "./components/Welcome";
 import Counter from "./components/Counter";
 import WarningConnection from "./components/WarningConnection";
@@ -8,6 +9,18 @@ import WarningConn from "./components/WarningConnection2";
 import Divider from "@mui/material/Divider";
 import ListAndKeys from "./components/ListAndKeys";
 import FormInputData from "./components/FormInputData";
+
+const style = {
+   position: "absolute",
+   top: "50%",
+   left: "50%",
+   transform: "translate(-50%, -50%)",
+   width: "50vw",
+   bgcolor: "background.paper",
+   border: "2px solid #000",
+   boxShadow: 24,
+   p: 4,
+};
 
 export default function App() {
    const [datasObj, setDatasObj] = useState([]);
@@ -120,7 +133,11 @@ export default function App() {
                {open ? "Close Form" : "Open Form"}
             </Button>
          </Stack>
-         {open && <FormInputData addData={addData} name={name} handleName={handleName} email={email} handleEmail={handleEmail} gender={gender} handleGender={handleGender} quote={quote} handleQuote={handleQuote} />}
+         <Modal open={open} onClose={openForm} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+            <Box sx={style}>
+               <FormInputData addData={addData} name={name} handleName={handleName} email={email} handleEmail={handleEmail} gender={gender} handleGender={handleGender} quote={quote} handleQuote={handleQuote} />
+            </Box>
+         </Modal>
          {datasObj.length > 0 ? <ListAndKeys datasObj={datasObj} handleDelete={handleDelete} /> : "Tidak ada data"}
       </>
    );
