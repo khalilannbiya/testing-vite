@@ -70,6 +70,7 @@ export default function App() {
       setEmail("");
       setGender("");
       setQuote("");
+      setOpen(false);
    };
 
    const handleName = (e) => {

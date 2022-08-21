@@ -36,7 +36,7 @@ const Counter = () => {
                icon={<SignalCellularOffOutlinedIcon />}
                variant="filled"
                severity="error"
-               sx={{ width: "50%", backgroundColor: "#F47174", color: "black", fontSize: "15px" }}
+               sx={{ backgroundColor: "#F47174", color: "black", fontSize: "15px" }}
                onClose={() => {
                   setOpen(false);
                }}
