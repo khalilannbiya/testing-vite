@@ -33,7 +33,7 @@ const styleDetail = {
    boxShadow: 24,
    p: 4,
    height: "200px",
-   overflow: "scroll",
+   overflowX: "auto",
 };
 
 function Loading() {
@@ -99,6 +99,7 @@ export default function App() {
    }, []);
 
    async function getDetail(id) {
+      setAyah([]);
       setLoadingDetail(true);
       const req = await fetch(`https://api.quran.gading.dev/surah/${id}`);
       try {
