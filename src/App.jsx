@@ -22,6 +22,28 @@ const style = {
    p: 4,
 };
 
+const styleDetail = {
+   position: "absolute",
+   top: "50%",
+   left: "50%",
+   transform: "translate(-50%, -50%)",
+   width: "50vw",
+   bgcolor: "background.paper",
+   border: "2px solid #000",
+   boxShadow: 24,
+   p: 4,
+   height: "200px",
+   overflow: "scroll",
+};
+
+function Loading() {
+   return (
+      <div>
+         <p>Loading.....</p>
+      </div>
+   );
+}
+
 export default function App() {
    const [datasObj, setDatasObj] = useState([]);
    const [open, setOpen] = useState(false);
@@ -29,6 +51,11 @@ export default function App() {
    const [email, setEmail] = useState("");
    const [gender, setGender] = useState("");
    const [quote, setQuote] = useState("");
+   const [loading, setLoading] = useState(false);
+   const [loadingDetail, setLoadingDetail] = useState(false);
+   const [surah, setSurah] = useState([]);
+   const [ayah, setAyah] = useState([]);
+   const [openDetailSurah, setOpenDetailSurah] = useState(false);
    // https://api.spaceflightnewsapi.net/v3/blogs
 
    useEffect(() => {
@@ -55,14 +82,39 @@ export default function App() {
    // }, []);
 
    // Ambil data dari API menggunakan asyns await
-   // useEffect(() => {
-   //    async function getData() {
-   //       const req = await fetch("https://api.spaceflightnewsapi.net/v3/blogs");
-   //       const res = await req.json();
-   //       console.log(res);
-   //    }
-   //    getData();
-   // }, []);
+   useEffect(() => {
+      async function getData() {
+         setLoading(true);
+         const req = await fetch("https://api.quran.gading.dev/surah");
+         try {
+            const res = await req.json();
+            setSurah(res.data);
+            setLoading(false);
+         } catch (error) {
+            setLoading(false);
+            throw new Error("Error dude", error);
+         }
+      }
+      getData();
+   }, []);
+
+   async function getDetail(id) {
+      setLoadingDetail(true);
+      const req = await fetch(`https://api.quran.gading.dev/surah/${id}`);
+      try {
+         const res = await req.json();
+         setAyah(res.data.verses);
+         setLoadingDetail(false);
+      } catch (error) {
+         setLoadingDetail(false);
+         throw new Error("Error dude", error);
+      }
+   }
+
+   const handleDetail = (id) => {
+      getDetail(id);
+      setOpenDetailSurah(true);
+   };
 
    const addData = (e) => {
       e.preventDefault();
@@ -105,6 +157,10 @@ export default function App() {
       setOpen(!open);
    };
 
+   const closeDetailSurah = () => {
+      setOpenDetailSurah(!openDetailSurah);
+   };
+
    const handleDelete = (id) => {
       const newDatas = [...datasObj];
 
@@ -139,6 +195,28 @@ export default function App() {
             </Box>
          </Modal>
          {datasObj.length > 0 ? <ListAndKeys datasObj={datasObj} handleDelete={handleDelete} /> : "Tidak ada data"}
+
+         <Divider sx={{ marginTop: "20px" }} />
+         {loading && <Loading />}
+         <ul>
+            {surah?.map((sura, index) => {
+               return (
+                  <li key={index} onClick={() => handleDetail(sura.number)}>
+                     {sura.name.transliteration.en}
+                  </li>
+               );
+            })}
+         </ul>
+         <Modal open={openDetailSurah} onClose={closeDetailSurah} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+            <Box sx={styleDetail}>
+               {loadingDetail && <Loading />}
+               <ul>
+                  {ayah.map((ayat, index) => {
+                     return <li key={index}>{ayat.text.arab}</li>;
+                  })}
+               </ul>
+            </Box>
+         </Modal>
       </>
    );
 }
